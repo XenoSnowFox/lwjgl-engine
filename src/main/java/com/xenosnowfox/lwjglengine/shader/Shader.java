@@ -68,4 +68,11 @@ public class Shader {
 	public ShaderType type() {
 		return this.type;
 	}
+
+	/**
+	 * Destroys the shader.
+	 */
+	public void destroy() {
+		GL46.glDeleteShader(this.id);
+	}
 }
