@@ -1,6 +1,7 @@
 package com.xenosnowfox.lwjglengine;
 
 import com.xenosnowfox.lwjglengine.display.Window;
+import com.xenosnowfox.lwjglengine.projection.Camera;
 import org.joml.Vector2i;
 import org.lwjgl.opengl.GL46;
 
@@ -19,7 +20,7 @@ public class Viewport implements GameLogic {
 	/**
 	 * Camera.
 	 */
-	private Object camera;
+	private Camera camera;
 
 	/**
 	 * Game logic to execute
@@ -43,7 +44,7 @@ public class Viewport implements GameLogic {
 	 * @param withCamera Camera to use with this Viewport.
 	 * @param withGameLogic Game logic.
 	 */
-	public Viewport(final Window withWindow, final Object withCamera, final GameLogic withGameLogic) {
+	public Viewport(final Window withWindow, final Camera withCamera, final GameLogic withGameLogic) {
 		this.window = Objects.requireNonNull(withWindow);
 		this.camera = Objects.requireNonNull(withCamera);
 		this.gameLogic = Objects.requireNonNull(withGameLogic);
