@@ -13,6 +13,15 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 public class Window {
 
 	/**
+	 * Returns a new builder capable of producing a new Window instance.
+	 *
+	 * @return Window builder.
+	 */
+	public static WindowBuilder builder() {
+		return new WindowBuilder();
+	}
+
+	/**
 	 * Title of the window.
 	 */
 	private String title;
