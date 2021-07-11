@@ -77,7 +77,7 @@ public class Viewport implements GameLogic {
 		this.window.setAsCurrentRenderingContext();
 
 		// set the viewport
-		GL46.glViewport(this.position.x, this.position.y, this.size.x, this.size.y);
+		GL46.glViewport(this.position.x, this.window.getHeight() - this.position.y - this.size.y, this.size.x, this.size.y);
 
 		this.gameLogic.render();
 	}
