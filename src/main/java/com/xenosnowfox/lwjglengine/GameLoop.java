@@ -3,6 +3,7 @@ package com.xenosnowfox.lwjglengine;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 public class GameLoop implements Runnable {
 
@@ -15,6 +16,10 @@ public class GameLoop implements Runnable {
 	private final Timer timer;
 
 	private final List<Viewport> viewports;
+
+	private static final Consumer<Void> EMPTY_CONSUMER = (aVoid) -> {};
+
+	private Consumer<Void> initializationConsumer = EMPTY_CONSUMER;
 
 	public GameLoop() {
 		this.timer = new Timer();
@@ -29,6 +34,11 @@ public class GameLoop implements Runnable {
 		return this.viewports.remove(withViewport);
 	}
 
+	public GameLoop onInitialization(final Consumer<Void> withConsumer) {
+		this.initializationConsumer = Objects.requireNonNull(withConsumer);
+		return this;
+	}
+
 	@Override
 	public void run() {
 		if (this.running) {
@@ -39,6 +49,7 @@ public class GameLoop implements Runnable {
 		try {
 			System.out.println("GAME LOOP: init");
 			this.initialize();
+			this.initializationConsumer.accept(null);
 
 			System.out.println("GAME LOOP: run");
 			float elapsedTime;
