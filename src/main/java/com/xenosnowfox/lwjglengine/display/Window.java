@@ -276,4 +276,12 @@ public class Window {
 		this.title = Objects.requireNonNull(withTitle);
 		GLFW.glfwSetWindowTitle(this.windowHandle, this.title);
 	}
+
+	public void hideCursor() {
+		GLFW.glfwSetInputMode(this.windowHandle, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_HIDDEN);
+	}
+
+	public void sideCursor() {
+		GLFW.glfwSetInputMode(this.windowHandle, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
+	}
 }
