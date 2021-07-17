@@ -17,9 +17,9 @@ public class GameLoop implements Runnable {
 
 	private final List<Viewport> viewports;
 
-	private static final Consumer<Void> EMPTY_CONSUMER = (aVoid) -> {};
+	private static final Runnable EMPTY_CONSUMER = () -> {};
 
-	private Consumer<Void> initializationConsumer = EMPTY_CONSUMER;
+	private Runnable initializationConsumer = EMPTY_CONSUMER;
 
 	public GameLoop() {
 		this.timer = new Timer();
@@ -34,7 +34,7 @@ public class GameLoop implements Runnable {
 		return this.viewports.remove(withViewport);
 	}
 
-	public GameLoop onInitialization(final Consumer<Void> withConsumer) {
+	public GameLoop onInitialization(final Runnable withConsumer) {
 		this.initializationConsumer = Objects.requireNonNull(withConsumer);
 		return this;
 	}
@@ -49,7 +49,7 @@ public class GameLoop implements Runnable {
 		try {
 			System.out.println("GAME LOOP: init");
 			this.initialize();
-			this.initializationConsumer.accept(null);
+			this.initializationConsumer.run();
 
 			System.out.println("GAME LOOP: run");
 			float elapsedTime;
