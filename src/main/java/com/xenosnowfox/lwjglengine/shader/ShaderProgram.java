@@ -9,6 +9,8 @@ import org.lwjgl.system.MemoryStack;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.function.Consumer;
 
 /**
  * Represents a shader program.
@@ -137,5 +139,12 @@ public class ShaderProgram {
 
 	public void uniform(String uniformName, Vector4f value) {
 		GL46.glUniform4f(uniforms.get(uniformName), value.x, value.y, value.z, value.w);
+	}
+
+	public void bindAndApply(final Consumer<ShaderProgram> withConsumer) {
+		this.bind();
+		Objects.requireNonNull(withConsumer)
+				.accept(this);
+		this.unbind();
 	}
 }
