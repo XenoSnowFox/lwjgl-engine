@@ -3,7 +3,6 @@ package com.xenosnowfox.lwjglengine;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Consumer;
 
 public class GameLoop implements Runnable {
 
