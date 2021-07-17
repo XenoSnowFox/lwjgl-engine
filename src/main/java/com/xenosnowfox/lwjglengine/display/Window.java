@@ -281,7 +281,7 @@ public class Window {
 		GLFW.glfwSetInputMode(this.windowHandle, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_HIDDEN);
 	}
 
-	public void sideCursor() {
+	public void showCursor() {
 		GLFW.glfwSetInputMode(this.windowHandle, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
 	}
 }
