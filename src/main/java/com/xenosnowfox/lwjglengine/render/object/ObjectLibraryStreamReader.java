@@ -70,5 +70,9 @@ public class ObjectLibraryStreamReader {
 		if (parts.size() != 3) {
 			throw new IOException("Vertex must contain exactly 3 parts.");
 		}
+
+		parts.stream()
+				.map(Float::parseFloat)
+				.forEach(this.vertex::add);
 	}
 }
