@@ -31,13 +31,10 @@ public class ObjectLibraryStreamReader {
 	public ObjectLibrary read() throws IOException {
 		String line = this.readLine();
 		while (line != null) {
-			System.out.println(line);
+			this.parseLine(line);
 			line = this.readLine();
 		}
 		System.out.println(this.toString());
-
-		vertex.forEach(System.out::println);
-
 		return null;
 	}
 
