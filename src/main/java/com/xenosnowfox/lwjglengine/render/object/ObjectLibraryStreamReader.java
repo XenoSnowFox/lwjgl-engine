@@ -74,13 +74,14 @@ public class ObjectLibraryStreamReader {
 
 		String[] subParts = Stream.of(parts[1].split(" "))
 				.filter(s -> !s.isBlank())
+				.collect(Collectors.toList())
 				.toArray(String[]::new);
 
 		switch (parts[0].toLowerCase(Locale.ROOT)) {
 			case "o":
 				this.parseObject(subParts);
 				break;
-				
+
 			case "v":
 				this.parseVertex(subParts);
 				break;
