@@ -29,19 +29,12 @@ public class ObjectLibraryStreamReader {
 		}
 		StringBuilder sb = new StringBuilder();
 		int newline = '\n';
-		while (true) {
-			int b = this.inputStream.read();
-			if (b == 0) {
-				this.finished = true;
-				break;
-			}
-
-			if (b == newline) {
-				break;
-			}
-
+		int b = this.inputStream.read();
+		while (b >= 0 && b != newline) {
 			sb.append((char) b);
+			b = this.inputStream.read();
 		}
+		this.finished = b < 0;
 		return sb.toString();
 	}
 
