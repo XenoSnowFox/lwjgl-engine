@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayDeque;
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Queue;
 import java.util.stream.Collectors;
@@ -17,6 +18,10 @@ public class ObjectLibraryStreamReader {
 
 	private Queue<Float> vertex = new ArrayDeque<>();
 
+	private Queue<Float> vertexNormal = new ArrayDeque<>();
+
+	private Queue<Float> vertexTexture = new ArrayDeque<>();
+
 	public ObjectLibraryStreamReader(final InputStream withInputStream) {
 		this.inputStream = Objects.requireNonNull(withInputStream);
 	}
@@ -25,6 +30,8 @@ public class ObjectLibraryStreamReader {
 	public String toString() {
 		return this.getClass().getName() + "{" + System.lineSeparator()
 				+ "\tvertex=" + vertex.toString() + System.lineSeparator()
+				+ "\tvertexNormal=" + vertexNormal.toString() + System.lineSeparator()
+				+ "\tvertexTexture=" + vertexTexture.toString() + System.lineSeparator()
 				+ "}";
 	}
 
@@ -58,9 +65,20 @@ public class ObjectLibraryStreamReader {
 		String[] parts = withLine.trim()
 				.split(" ", 2);
 
-		System.out.println(Arrays.toString(parts));
-		if (parts[0].equalsIgnoreCase("v")) {
-			this.parseVertex(parts[1].split(" "));
+		switch (parts[0].toLowerCase(Locale.ROOT)) {
+			case "v":
+				this.parseVertex(parts[1].split(" "));
+				break;
+
+			case "vn":
+				this.parseVertexNormal(parts[1].split(" "));
+				break;
+
+			case "vt":
+				this.parseVertexTexture(parts[1].split(" "));
+				break;
+
+			default: break;
 		}
 	}
 
@@ -69,12 +87,48 @@ public class ObjectLibraryStreamReader {
 				.filter(s -> !s.isBlank())
 				.collect(Collectors.toList());
 
-		if (parts.size() != 3) {
-			throw new IOException("Vertex must contain exactly 3 parts.");
+		if (parts.size() == 3) {
+			parts.add("1.0");
+		}
+
+		if (parts.size() != 4) {
+			throw new IOException("Vertex must contain either 3 or 4 parts.");
 		}
 
 		parts.stream()
 				.map(Float::parseFloat)
 				.forEach(this.vertex::add);
+	}
+
+	private void parseVertexNormal(String... values) throws IOException {
+		var parts = Stream.of(values)
+				.filter(s -> !s.isBlank())
+				.collect(Collectors.toList());
+
+		if (parts.size() != 3) {
+			throw new IOException("Vertex Normal must contain exactly 3 parts.");
+		}
+
+		parts.stream()
+				.map(Float::parseFloat)
+				.forEach(this.vertexNormal::add);
+	}
+
+	private void parseVertexTexture(String... values) throws IOException {
+		var parts = Stream.of(values)
+				.filter(s -> !s.isBlank())
+				.collect(Collectors.toList());
+
+		while (parts.size() < 3) {
+			parts.add("0.0");
+		}
+
+		if (parts.size() != 3) {
+			throw new IOException("Vertex Texture must contain exactly 3 parts.");
+		}
+
+		parts.stream()
+				.map(Float::parseFloat)
+				.forEach(this.vertexTexture::add);
 	}
 }
