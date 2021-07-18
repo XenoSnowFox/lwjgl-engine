@@ -72,10 +72,13 @@ public class ObjectLibraryStreamReader {
 		String[] parts = withLine.trim()
 				.split(" ", 2);
 
-		String[] subParts = Stream.of(parts[1].split(" "))
-				.filter(s -> !s.isBlank())
-				.collect(Collectors.toList())
-				.toArray(String[]::new);
+		String[] subParts = new String[0];
+		if (parts.length > 1) {
+			subParts = Stream.of(parts[1].split(" "))
+					.filter(s -> !s.isBlank())
+					.collect(Collectors.toList())
+					.toArray(String[]::new);
+		}
 
 		switch (parts[0].toLowerCase(Locale.ROOT)) {
 			case "o":
