@@ -58,6 +58,7 @@ public class LWJGLEngine implements Runnable {
 			}
 
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			throw new RuntimeException(ex);
 		} finally {
 			LOGGER.fine("LWJGLEngine: Destroying.");
