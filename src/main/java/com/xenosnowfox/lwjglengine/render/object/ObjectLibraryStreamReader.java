@@ -3,6 +3,7 @@ package com.xenosnowfox.lwjglengine.render.object;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Queue;
 import java.util.stream.Collectors;
@@ -34,6 +35,9 @@ public class ObjectLibraryStreamReader {
 			line = this.readLine();
 		}
 		System.out.println(this.toString());
+
+		vertex.forEach(System.out::println);
+
 		return null;
 	}
 
@@ -57,6 +61,7 @@ public class ObjectLibraryStreamReader {
 		String[] parts = withLine.trim()
 				.split(" ", 2);
 
+		System.out.println(Arrays.toString(parts));
 		if (parts[0].equalsIgnoreCase("v")) {
 			this.parseVertex(parts[1].split(" "));
 		}
