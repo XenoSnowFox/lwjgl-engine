@@ -3,7 +3,9 @@ package com.xenosnowfox.lwjglengine.render.object;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Queue;
@@ -16,11 +18,15 @@ public class ObjectLibraryStreamReader {
 
 	private boolean finished = false;
 
+	private Integer currentObject = null;
+
 	private Queue<Float> vertex = new ArrayDeque<>();
 
 	private Queue<Float> vertexNormal = new ArrayDeque<>();
 
 	private Queue<Float> vertexTexture = new ArrayDeque<>();
+
+	private List<String> objects = new ArrayList<>();
 
 	public ObjectLibraryStreamReader(final InputStream withInputStream) {
 		this.inputStream = Objects.requireNonNull(withInputStream);
@@ -29,6 +35,7 @@ public class ObjectLibraryStreamReader {
 	@Override
 	public String toString() {
 		return this.getClass().getName() + "{" + System.lineSeparator()
+				+ "\tobjects=" + objects.toString() + System.lineSeparator()
 				+ "\tvertex=" + vertex.toString() + System.lineSeparator()
 				+ "\tvertexNormal=" + vertexNormal.toString() + System.lineSeparator()
 				+ "\tvertexTexture=" + vertexTexture.toString() + System.lineSeparator()
@@ -65,17 +72,25 @@ public class ObjectLibraryStreamReader {
 		String[] parts = withLine.trim()
 				.split(" ", 2);
 
+		String[] subParts = Stream.of(parts[1].split(" "))
+				.filter(s -> !s.isBlank())
+				.toArray(String[]::new);
+
 		switch (parts[0].toLowerCase(Locale.ROOT)) {
+			case "o":
+				this.parseObject(subParts);
+				break;
+				
 			case "v":
-				this.parseVertex(parts[1].split(" "));
+				this.parseVertex(subParts);
 				break;
 
 			case "vn":
-				this.parseVertexNormal(parts[1].split(" "));
+				this.parseVertexNormal(subParts);
 				break;
 
 			case "vt":
-				this.parseVertexTexture(parts[1].split(" "));
+				this.parseVertexTexture(subParts);
 				break;
 
 			default: break;
@@ -130,5 +145,18 @@ public class ObjectLibraryStreamReader {
 		parts.stream()
 				.map(Float::parseFloat)
 				.forEach(this.vertexTexture::add);
+	}
+
+	private void parseObject(String... values) throws IOException {
+		if (values.length != 1) {
+			throw new IOException("Object command must contain exactly 1 value");
+		}
+
+		int index = this.objects.indexOf(values[0]);
+		if (index < 0) {
+			index = this.objects.size();
+			this.objects.add(values[0]);
+		}
+		this.currentObject = index;
 	}
 }
